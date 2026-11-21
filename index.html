@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="CareRoutine — a private, offline-first tracker for recurring household and personal maintenance tasks.">
+<meta name="theme-color" content="#0D9488">
+<title>CareRoutine — Recurring Maintenance Tracker</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png" sizes="192x192" type="image/png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="app">
+  <aside class="sidebar" aria-label="Main navigation">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+      <span class="brand-name">CareRoutine</span>
+    </div>
+    <nav class="side-nav" aria-label="Sections">
+      <button type="button" class="nav-btn is-active" data-view="dashboard" aria-current="page">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        <span>Dashboard</span>
+      </button>
+      <button type="button" class="nav-btn" data-view="routines">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span>My Routines</span>
+      </button>
+      <button type="button" class="nav-btn" data-view="history">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <span>Activity History</span>
+      </button>
+      <button type="button" class="nav-btn" data-view="settings">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+    <p class="side-note">Private by design. Your routines never leave this device.</p>
+  </aside>
+
+  <main id="main" class="main">
+    <!-- Dashboard -->
+    <section id="view-dashboard" class="view is-active" aria-labelledby="dashTitle">
+      <header class="view-head">
+        <div>
+          <h1 id="dashTitle">Dashboard</h1>
+          <p class="view-sub" id="dashDate"></p>
+        </div>
+        <button type="button" class="btn btn-primary" id="dashAddBtn">+ Add Routine</button>
+      </header>
+      <div class="stats" role="group" aria-label="Summary">
+        <div class="stat-card"><span class="stat-label">Total Routines</span><span class="stat-value" id="statTotal">0</span></div>
+        <div class="stat-card stat-due"><span class="stat-label">Due Today</span><span class="stat-value" id="statDueToday">0</span></div>
+        <div class="stat-card stat-overdue"><span class="stat-label">Overdue</span><span class="stat-value" id="statOverdue">0</span></div>
+        <div class="stat-card"><span class="stat-label">Completed This Month</span><span class="stat-value" id="statMonth">0</span></div>
+      </div>
+      <div id="dashEmpty" class="empty-state" hidden>
+        <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <h2>Nothing scheduled yet</h2>
+        <p>Add your first routine, like changing bedsheets every week or cleaning the AC filter every month, and CareRoutine will keep track of when it is due next.</p>
+        <button type="button" class="btn btn-primary" id="dashEmptyAddBtn">Add Your First Routine</button>
+      </div>
+      <div id="dashContent" hidden>
+        <h2 class="section-title">Needs attention</h2>
+        <div id="attentionList" class="card-list"></div>
+        <p id="attentionNone" class="muted" hidden>Nothing due right now. You are all caught up.</p>
+        <h2 class="section-title">Upcoming</h2>
+        <div id="upcomingList" class="card-list"></div>
+        <p id="upcomingNone" class="muted" hidden>No upcoming routines.</p>
+        <h2 class="section-title">Recent completions</h2>
+        <div id="recentList" class="card-list"></div>
+        <p id="recentNone" class="muted" hidden>No completions recorded yet.</p>
+      </div>
+    </section>
+
+    <!-- Routines -->
+    <section id="view-routines" class="view" aria-labelledby="routinesTitle">
+      <header class="view-head">
+        <div>
+          <h1 id="routinesTitle">My Routines</h1>
+          <p class="view-sub">Every recurring task, with its next due date.</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="addRoutineBtn">+ Add Routine</button>
+      </header>
+      <div class="toolbar" role="search">
+        <label class="toolbar-field">
+          <span class="visually-hidden">Search routines</span>
+          <input type="search" id="routineSearch" placeholder="Search routines…" autocomplete="off">
+        </label>
+        <label class="toolbar-field">
+          <span class="visually-hidden">Filter by category</span>
+          <select id="filterCategory"><option value="">All categories</option></select>
+        </label>
+        <label class="toolbar-field">
+          <span class="visually-hidden">Filter by status</span>
+          <select id="filterStatus">
+            <option value="">All statuses</option>
+            <option>Overdue</option><option>Due Today</option><option>Upcoming</option><option>Paused</option>
+          </select>
+        </label>
+        <label class="toolbar-field">
+          <span class="visually-hidden">Sort routines</span>
+          <select id="sortRoutines">
+            <option value="due">Sort: next due date</option>
+            <option value="name">Sort: name A–Z</option>
+            <option value="category">Sort: category</option>
+            <option value="lastDone">Sort: last done</option>
+          </select>
+        </label>
+      </div>
+      <div id="routineList" class="card-list"></div>
+      <p id="routineEmpty" class="empty-state" hidden>No routines yet. Add one to get started.</p>
+      <p id="routineNoMatch" class="muted" hidden>No routines match your search or filters.</p>
+    </section>
+
+    <!-- History -->
+    <section id="view-history" class="view" aria-labelledby="historyTitle">
+      <header class="view-head">
+        <div>
+          <h1 id="historyTitle">Activity History</h1>
+          <p class="view-sub" id="historySummary">0 completions recorded.</p>
+        </div>
+        <button type="button" class="btn" id="exportCsvBtn">Export CSV</button>
+      </header>
+      <div class="toolbar">
+        <label class="toolbar-field">
+          <span class="visually-hidden">Filter by month</span>
+          <input type="month" id="filterMonth" aria-label="Filter by month">
+        </label>
+        <label class="toolbar-field">
+          <span class="visually-hidden">Filter by routine</span>
+          <select id="filterRoutine"><option value="">All routines</option></select>
+        </label>
+        <button type="button" class="btn btn-ghost" id="clearHistoryFilters">Clear filters</button>
+      </div>
+      <div id="historyList" class="card-list"></div>
+      <p id="historyEmpty" class="empty-state" hidden>No completions recorded yet. Mark a routine done and it will show up here.</p>
+      <p id="historyNoMatch" class="muted" hidden>No completions match the selected filters.</p>
+    </section>
+
+    <!-- Settings -->
+    <section id="view-settings" class="view" aria-labelledby="settingsTitle">
+      <header class="view-head">
+        <div>
+          <h1 id="settingsTitle">Settings</h1>
+          <p class="view-sub">Appearance, backup, and your data.</p>
+        </div>
+      </header>
+      <div class="settings-grid">
+        <div class="card settings-card">
+          <h2>Appearance</h2>
+          <fieldset class="theme-field">
+            <legend>Theme</legend>
+            <label><input type="radio" name="theme" value="light"> Light</label>
+            <label><input type="radio" name="theme" value="dark"> Dark</label>
+            <label><input type="radio" name="theme" value="system"> System</label>
+          </fieldset>
+        </div>
+        <div class="card settings-card">
+          <h2>Backup &amp; restore</h2>
+          <p class="muted">Export a JSON backup of all routines, completions, and settings. Restoring validates the whole file first; an invalid file leaves your data untouched.</p>
+          <div class="btn-row">
+            <button type="button" class="btn" id="exportJsonBtn">Export JSON backup</button>
+            <button type="button" class="btn" id="importJsonBtn">Import JSON backup</button>
+            <input type="file" id="importJsonInput" accept=".json,application/json" class="visually-hidden" aria-label="Choose a JSON backup file to import">
+          </div>
+          <p id="backupMessage" class="form-message" role="status" aria-live="polite"></p>
+        </div>
+        <div class="card settings-card">
+          <h2>Your data</h2>
+          <p id="dataSummary" class="muted">0 routines · 0 completions</p>
+          <p class="muted">Everything is stored only in this browser (IndexedDB). There is no account and nothing is sent anywhere.</p>
+          <button type="button" class="btn btn-danger" id="deleteAllBtn">Delete All Data</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="bottom-nav" aria-label="Sections">
+  <button type="button" class="nav-btn is-active" data-view="dashboard"><span>Dashboard</span></button>
+  <button type="button" class="nav-btn" data-view="routines"><span>Routines</span></button>
+  <button type="button" class="nav-btn" data-view="history"><span>History</span></button>
+  <button type="button" class="nav-btn" data-view="settings"><span>Settings</span></button>
+</nav>
+
+<!-- Routine form dialog -->
+<dialog id="routineDialog" class="dialog" aria-labelledby="routineDialogTitle">
+  <form id="routineForm" method="dialog" novalidate>
+    <h2 id="routineDialogTitle">Add routine</h2>
+    <p id="routineError" class="form-error" role="alert" hidden></p>
+    <input type="hidden" id="routineId">
+    <label class="field">Name
+      <input type="text" id="routineName" maxlength="100" required placeholder="e.g. Clean AC filter">
+    </label>
+    <label class="field">Category
+      <select id="routineCategory"></select>
+    </label>
+    <div class="field-row">
+      <label class="field">Repeat every
+        <input type="number" id="routineInterval" min="1" max="365" step="1" value="1" required>
+      </label>
+      <label class="field">Unit
+        <select id="routineUnit">
+          <option value="days">day(s)</option>
+          <option value="weeks">week(s)</option>
+          <option value="months">month(s)</option>
+        </select>
+      </label>
+    </div>
+    <label class="field">First scheduled date <span class="muted">(optional)</span>
+      <input type="date" id="routineStartDate">
+    </label>
+    <label class="field">Last done date <span class="muted">(optional)</span>
+      <input type="date" id="routineLastDone">
+    </label>
+    <label class="field">Notes <span class="muted">(optional, max 500 characters)</span>
+      <textarea id="routineNotes" maxlength="500" rows="3" placeholder="Anything worth remembering about this task."></textarea>
+    </label>
+    <div class="dialog-actions">
+      <button type="button" class="btn" data-close>Cancel</button>
+      <button type="submit" class="btn btn-primary" id="routineSubmit">Save routine</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Mark done dialog -->
+<dialog id="doneDialog" class="dialog" aria-labelledby="doneDialogTitle">
+  <form id="doneForm" method="dialog" novalidate>
+    <h2 id="doneDialogTitle">Mark done</h2>
+    <p id="doneRoutineName" class="muted"></p>
+    <p id="doneError" class="form-error" role="alert" hidden></p>
+    <input type="hidden" id="doneRoutineId">
+    <label class="field">Completion date
+      <input type="date" id="doneDate" required>
+    </label>
+    <label class="field">Note <span class="muted">(optional, max 500 characters)</span>
+      <textarea id="doneNote" maxlength="500" rows="2" placeholder="Optional note for this completion."></textarea>
+    </label>
+    <div class="dialog-actions">
+      <button type="button" class="btn" data-close>Cancel</button>
+      <button type="submit" class="btn btn-primary" id="doneSubmit">Save completion</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Edit completion dialog -->
+<dialog id="editCompletionDialog" class="dialog" aria-labelledby="editCompletionTitle">
+  <form id="editCompletionForm" method="dialog" novalidate>
+    <h2 id="editCompletionTitle">Edit completion</h2>
+    <p id="editCompletionRoutine" class="muted"></p>
+    <p id="editCompletionError" class="form-error" role="alert" hidden></p>
+    <input type="hidden" id="editCompletionId">
+    <label class="field">Completion date
+      <input type="date" id="editCompletionDate" required>
+    </label>
+    <label class="field">Note <span class="muted">(optional, max 500 characters)</span>
+      <textarea id="editCompletionNote" maxlength="500" rows="2"></textarea>
+    </label>
+    <div class="dialog-actions">
+      <button type="button" class="btn" data-close>Cancel</button>
+      <button type="submit" class="btn btn-primary">Save changes</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Confirm dialog -->
+<dialog id="confirmDialog" class="dialog" aria-labelledby="confirmTitle">
+  <form method="dialog">
+    <h2 id="confirmTitle">Are you sure?</h2>
+    <p id="confirmMessage" class="muted"></p>
+    <div class="dialog-actions">
+      <button type="button" class="btn" data-close>Cancel</button>
+      <button type="submit" class="btn btn-danger" id="confirmYes">Delete</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Delete all dialog -->
+<dialog id="deleteAllDialog" class="dialog" aria-labelledby="deleteAllTitle">
+  <form id="deleteAllForm" method="dialog" novalidate>
+    <h2 id="deleteAllTitle">Delete all data</h2>
+    <p class="muted">This permanently deletes every routine, completion, and setting. There is no undo. Type <strong>DELETE</strong> to confirm.</p>
+    <label class="field">Type DELETE to confirm
+      <input type="text" id="deleteAllConfirm" autocomplete="off" placeholder="DELETE">
+    </label>
+    <div class="dialog-actions">
+      <button type="button" class="btn" data-close>Cancel</button>
+      <button type="submit" class="btn btn-danger" id="deleteAllYes" disabled>Delete everything</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="date-utils.js"></script>
+<script src="backup.js"></script>
+<script src="db.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
